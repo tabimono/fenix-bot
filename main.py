@@ -2,6 +2,8 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler, ConversationHandler, MessageHandler, filters
+from dotenv import load_dotenv
+
 import openpyxl
 import os
 import calendar
@@ -298,7 +300,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     elif 'awaiting_table_selection' in context.user_data and context.user_data['awaiting_table_selection']:
         await show_tableusers(update, context)
 
-app = ApplicationBuilder().token("7717253029:AAGxFbbHnOS-Bct6p9lVK9BgnY8on0opbjo").build()
+load_dotenv()
+
+# Get the token from the environment
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+
+if not TELEGRAM_BOT_TOKEN:
+    raise ValueError("Telegram bot token is not set in the environment variables.")
+
+app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CallbackQueryHandler(button))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
