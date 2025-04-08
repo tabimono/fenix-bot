@@ -235,6 +235,7 @@ async def add_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         else:
             await update.message.reply_text(text="Please enter the name of the user:")
         context.user_data['awaiting_user_name'] = True
+    await update.message.reply_text(text="Please share your Telegram contact information.", reply_markup=telegram.KeyboardButton(text="Share Contact", request_contact=True))
 
 async def delete_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if 'awaiting_user_id' in context.user_data and context.user_data['awaiting_user_id']:
